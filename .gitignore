@@ -1,0 +1,6 @@
+__pycache__
+checkstyle
+dist
+*.pyc
+*.egg-info
+.vscode

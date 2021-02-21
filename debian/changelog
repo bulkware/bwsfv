@@ -1,0 +1,43 @@
+bwsfv (0.6.0) unstable; urgency=low
+
+  * Debian package sources.
+
+ -- Antti-Pekka Meronen <anttipekkameronen@google.com>  Sun, 21 Feb 2021 00:00:00 +0000
+
+bwsfv (0.5.0) unstable; urgency=low
+
+  * Add file.
+
+ -- Antti-Pekka Meronen <anttipekkameronen@google.com>  Sun, 20 Feb 2021 00:00:00 +0000
+
+bwsfv (0.4.0) unstable; urgency=low
+
+  * About application.
+  * Placeholder application icon.
+  * Toolbar.
+
+ -- Antti-Pekka Meronen <anttipekkameronen@google.com>  Sun, 14 Feb 2021 00:00:00 +0000
+
+bwsfv (0.3.0) unstable; urgency=low
+
+  * External CSS file for styling.
+  * CRC32 checking.
+  * Threading.
+  * Updated ListStore/TreeView columns.
+
+ -- Antti-Pekka Meronen <anttipekkameronen@google.com>  Sun, 13 Feb 2021 00:00:00 +0000
+
+bwsfv (0.2.0) unstable; urgency=low
+
+  * ListStore.
+  * MenuBar.
+  * ProgressBar.
+  * TreeView.
+
+ -- Antti-Pekka Meronen <anttipekkameronen@google.com>  Sun, 07 Feb 2021 00:00:00 +0000
+
+bwsfv (0.1.0) unstable; urgency=low
+
+  * Initial version.
+
+ -- Antti-Pekka Meronen <anttipekkameronen@google.com>  Sun, 06 Feb 2021 00:00:00 +0000

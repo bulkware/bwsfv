@@ -1,0 +1,12 @@
+Source: bwsfv
+Maintainer: Antti-Pekka Meronen <anttipekkameronen@google.com>
+Section: python
+Priority: optional
+Build-Depends: python3-setuptools, python3-all, debhelper (>= 9)
+Standards-Version: 3.9.1
+Homepage: https://github.com/bulkware/bwsfv
+
+Package: python3-bwsfv
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}
+Description: An application to verify file consistency with .sfv files
