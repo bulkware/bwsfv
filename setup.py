@@ -5,7 +5,7 @@ import os
 from setuptools import setup
 
 setup(
-    name="bwSFV",
+    name="bwsfv",
     version="0.6.0",
     author="Antti-Pekka Meronen",
     author_email="anttipekkameronen@google.com",

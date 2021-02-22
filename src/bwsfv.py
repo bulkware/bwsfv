@@ -27,7 +27,7 @@ css_path = os.path.join(script_dir, "default.css")
 icon_path = os.path.join(script_dir, "icon_128x128.png")
 
 # Main window
-class bwSFV(Gtk.Window):
+class bwsfv(Gtk.Window):
 
     def __init__(self):
 
@@ -39,7 +39,7 @@ class bwSFV(Gtk.Window):
         }  # Application default configurations
 
         # Set window defaults
-        Gtk.Window.__init__(self, title="bwSFV")
+        Gtk.Window.__init__(self, title="bwsfv")
         self.set_icon_from_file(icon_path)
         self.set_default_size(
             self.config.get("window_width"),
@@ -343,7 +343,7 @@ class bwSFV(Gtk.Window):
     # About application
     def about_application(self, widget):
         about = Gtk.AboutDialog(transient_for=self)
-        about.set_program_name("bwSFV")
+        about.set_program_name("bwsfv")
         about.set_version(application_version)
         about.set_copyright("Copyright (c) 2021+ Antti-Pekka Meronen.")
         about.set_comments("An application to verify file consistency with .sfv files.")
@@ -421,7 +421,7 @@ class bwSFV(Gtk.Window):
 
 # Initialize and run application
 def main():
-    win = bwSFV()
+    win = bwsfv()
     win.connect("destroy", Gtk.main_quit)
     win.show_all()
     Gtk.main()

@@ -3,4 +3,5 @@ checkstyle
 dist
 *.pyc
 *.egg-info
+*.tar.gz
 .vscode

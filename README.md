@@ -1,4 +1,4 @@
-# bwSFV
+# bwsfv
 
 An application to verify file consistency with .sfv files.
 
@@ -32,4 +32,4 @@ Enter the application directory using this command:
 `cd bwsfv`
 
 You can run the application from the source code using this command:
-`python3 src/bwsfv/bwsfv.py`
+`python3 src/bwsfv.py`
