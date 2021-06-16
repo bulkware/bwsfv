@@ -67,77 +67,59 @@ class bwsfv(Gtk.Window):
         fileselection = Gtk.MenuItem(label="File")
         fileselection.set_submenu(filemenu)
 
-        openselection = Gtk.ImageMenuItem.new_from_stock("gtk-open")
-        openselection.set_label("Open file...")
-        openselection.connect("activate", self.dialog_open_file)
-        filemenu.append(openselection)
+        menuselection = Gtk.ImageMenuItem.new_from_stock(stock_id=Gtk.STOCK_OPEN)
+        menuselection.set_label("Open file...")
+        menuselection.connect("activate", self.dialog_open_file)
+        filemenu.append(menuselection)
+
+        menuselection = Gtk.ImageMenuItem.new_from_stock(stock_id=Gtk.STOCK_APPLY)
+        menuselection.set_label("Check files")
+        menuselection.connect("activate", self.check_files)
+        filemenu.append(menuselection)
 
         separator = Gtk.SeparatorMenuItem()
         filemenu.append(separator)
 
-        exitselection = Gtk.ImageMenuItem.new_from_stock("gtk-quit", None)
-        exitselection.set_label("Exit")
-        exitselection.connect("activate", Gtk.main_quit)
-        filemenu.append(exitselection)
+        menuselection = Gtk.ImageMenuItem.new_from_stock(stock_id=Gtk.STOCK_NEW)
+        menuselection.set_label("New file")
+        menuselection.connect("activate", self.new_file)
+        filemenu.append(menuselection)
 
+        menuselection = Gtk.ImageMenuItem.new_from_stock(stock_id=Gtk.STOCK_ADD)
+        menuselection.set_label("Add file(s)...")
+        menuselection.connect("activate", self.add_files)
+        filemenu.append(menuselection)
+
+        menuselection = Gtk.ImageMenuItem.new_from_stock(stock_id=Gtk.STOCK_SAVE)
+        menuselection.set_label("Save file...")
+        menuselection.connect("activate", self.save_file)
+        filemenu.append(menuselection)
+
+        menuselection = Gtk.ImageMenuItem.new_from_stock(stock_id=Gtk.STOCK_SAVE_AS)
+        menuselection.set_label("Save file as...")
+        menuselection.connect("activate", self.save_file_as)
+        filemenu.append(menuselection)
+
+        separator = Gtk.SeparatorMenuItem()
+        filemenu.append(separator)
+
+        menuselection = Gtk.ImageMenuItem.new_from_stock(stock_id=Gtk.STOCK_QUIT)
+        menuselection.set_label("Quit")
+        menuselection.connect("activate", self.quit_application)
+        filemenu.append(menuselection)
+
+        helpmenu = Gtk.Menu()
+        helpselection = Gtk.MenuItem(label="Help")
+        helpselection.set_submenu(helpmenu)
+
+        menuselection = Gtk.ImageMenuItem.new_from_stock(stock_id=Gtk.STOCK_ABOUT)
+        menuselection.set_label("About application...")
+        menuselection.connect("activate", self.about_application)
+        helpmenu.append(menuselection)
+
+        # Append selections to menubar
         menubar.append(fileselection)
-
-        # ToolBar
-        toolbar = Gtk.Toolbar()
-
-        toolbutton = Gtk.ToolButton(stock_id=Gtk.STOCK_OPEN)
-        toolbutton.set_label("Open file...")
-        toolbutton.set_tooltip_text("Open file...")
-        toolbutton.connect("clicked", self.dialog_open_file)
-        toolbar.add(toolbutton)
-
-        toolbutton = Gtk.ToolButton(stock_id=Gtk.STOCK_APPLY)
-        toolbutton.set_label("Check files")
-        toolbutton.set_tooltip_text("Check files")
-        toolbutton.connect("clicked", self.check_files)
-        toolbar.add(toolbutton)
-
-        separatortoolitem = Gtk.SeparatorToolItem()
-        toolbar.add(separatortoolitem)
-
-        toolbutton = Gtk.ToolButton(stock_id=Gtk.STOCK_NEW)
-        toolbutton.set_label("New file")
-        toolbutton.set_tooltip_text("New file")
-        toolbutton.connect("clicked", self.new_file)
-        toolbar.add(toolbutton)
-
-        toolbutton = Gtk.ToolButton(stock_id=Gtk.STOCK_ADD)
-        toolbutton.set_label("Add file(s)...")
-        toolbutton.set_tooltip_text("Add file(s)...")
-        toolbutton.connect("clicked", self.add_files)
-        toolbar.add(toolbutton)
-
-        toolbutton = Gtk.ToolButton(stock_id=Gtk.STOCK_SAVE)
-        toolbutton.set_label("Save file...")
-        toolbutton.set_tooltip_text("Save file...")
-        toolbutton.connect("clicked", self.save_file)
-        toolbar.add(toolbutton)
-
-        toolbutton = Gtk.ToolButton(stock_id=Gtk.STOCK_SAVE_AS)
-        toolbutton.set_label("Save file as...")
-        toolbutton.set_tooltip_text("Save file as...")
-        toolbutton.connect("clicked", self.save_file_as)
-        toolbar.add(toolbutton)
-
-        separatortoolitem = Gtk.SeparatorToolItem()
-        toolbar.add(separatortoolitem)
-
-        toolbutton = Gtk.ToolButton(stock_id=Gtk.STOCK_ABOUT)
-        toolbutton.set_label("About application...")
-        toolbutton.set_tooltip_text("About application...")
-        toolbutton.connect("clicked", self.about_application)
-        toolbar.add(toolbutton)
-
-        toolbutton = Gtk.ToolButton(stock_id=Gtk.STOCK_QUIT)
-        toolbutton.set_label("Quit")
-        toolbutton.set_tooltip_text("Quit")
-        toolbutton.connect("clicked", self.quit_application)
-        toolbar.add(toolbutton)
+        menubar.append(helpselection)
 
         # Treeview
         # The first column in the ListStore is file path(s), but we won't show
@@ -180,7 +162,6 @@ class bwsfv(Gtk.Window):
         # Create a box for the widgets
         box = Gtk.Box(orientation="vertical")
         box.pack_start(menubar, 0, 0, 0)
-        box.pack_start(toolbar, 0, 0, 0)
         box.pack_start(scrolled, 1, 1, 0)
         box.pack_start(self.progressbar, 0, 0, 0)
 
