@@ -262,7 +262,66 @@ class bwsfv(Gtk.Window):
 
     # Save file as...
     def save_file_as(self, widget):
-        print("Save file as...")
+
+        # Declare variables
+        filepath = None
+
+        # Initialize file save dialog
+        dialog = Gtk.FileChooserDialog(
+            title="Save file as...",
+            parent=self,
+            action=Gtk.FileChooserAction.SAVE
+        )
+
+        # Define file open dialog buttons
+        dialog.add_buttons(
+            Gtk.STOCK_CANCEL,
+            Gtk.ResponseType.CANCEL,
+            Gtk.STOCK_SAVE_AS,
+            Gtk.ResponseType.OK,
+        )
+
+        # Show dialog and retrieve possible selection(s)
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            filepath = dialog.get_filename()
+        elif response == Gtk.ResponseType.CANCEL:
+            pass
+
+        dialog.destroy()
+
+        # No file selected
+        if not filepath:
+            return True
+
+        # Check for existing file
+        if os.path.exists(filepath):
+
+            # Show error dialog for unsupported file extension
+            dialog = Gtk.MessageDialog(
+                transient_for=self,
+                flags=0,
+                message_type=Gtk.MessageType.INFO,
+                buttons=Gtk.ButtonsType.OK_CANCEL,
+                text="Overwrite"
+            )
+
+            dialog.format_secondary_text(
+                "Overwrite existing file?"
+            )
+
+            dialog.run()
+            if response == Gtk.ResponseType.OK:
+                dialog.destroy()
+            elif response == Gtk.ResponseType.CANCEL:
+                dialog.destroy()
+                return True
+
+        # Writing to file
+        with open(filepath, "w") as fh:
+            for i, item in enumerate(self.liststore):
+                fh.write(item[0], item[3])
+    
         return True
 
     # Add files...
