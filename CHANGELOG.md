@@ -1,6 +1,4 @@
-# bwsfv
-
-## Changelog
+# bwsfv - Changelog
 
 
 ## 0.6.0. (2020-02-21)
