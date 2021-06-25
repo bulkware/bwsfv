@@ -236,9 +236,12 @@ class bwsfv(Gtk.Window):
 
             return True
 
+        # Set file path
+        self.filepath = checkfile
+
         # Read .sfv file
-        dirname = os.path.dirname(checkfile)
-        with open(checkfile, "r") as f:
+        dirname = os.path.dirname(self.filepath)
+        with open(self.filepath, "r") as f:
             for line in f:
                 line = line.strip()
 
@@ -257,7 +260,28 @@ class bwsfv(Gtk.Window):
 
     # Save file
     def save_file(self, widget):
-        print("Save file")
+
+        # Write to file
+        try:
+            with open(self.filepath, "w") as fh:
+                for item in self.liststore:
+                    fh.write(f"{item[1]} {item[3]}\n")
+        except Exception as e:
+            dialog = Gtk.MessageDialog(
+                transient_for=self,
+                flags=0,
+                message_type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                text="File write error",
+            )
+
+            dialog.format_secondary_text(
+                f"Unable to write file: {basename}"
+            )
+
+            dialog.run()
+            dialog.destroy()
+    
         return True
 
     # Save file as...
@@ -298,7 +322,7 @@ class bwsfv(Gtk.Window):
         # Check for existing file
         if os.path.exists(filepath):
 
-            # Show error dialog for unsupported file extension
+            # Show confirmation for overwriting file
             dialog = Gtk.MessageDialog(
                 transient_for=self,
                 flags=0,
@@ -318,28 +342,9 @@ class bwsfv(Gtk.Window):
                 dialog.destroy()
                 return True
 
-        # Write to file
-        try:
-            with open(filepath, "w") as fh:
-                for item in self.liststore:
-                    fh.write(f"{item[1]} {item[3]}\n")
-        except Exception as e:
-            dialog = Gtk.MessageDialog(
-                transient_for=self,
-                flags=0,
-                message_type=Gtk.MessageType.ERROR,
-                buttons=Gtk.ButtonsType.OK,
-                text="File write error",
-            )
-
-            dialog.format_secondary_text(
-                f"Unable to write file: {basename}"
-            )
-
-            dialog.run()
-            dialog.destroy()
-    
-        return True
+        # Set new filepath and save file
+        self.filepath = filepath
+        self.save_file(widget)
 
     # Add files...
     def add_files(self, widget):
