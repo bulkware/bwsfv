@@ -285,6 +285,7 @@ class bwsfv(Gtk.Window):
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             filepath = dialog.get_filename()
+            basename = os.path.abspath(filepath)
         elif response == Gtk.ResponseType.CANCEL:
             pass
 
@@ -317,10 +318,26 @@ class bwsfv(Gtk.Window):
                 dialog.destroy()
                 return True
 
-        # Writing to file
-        with open(filepath, "w") as fh:
-            for i, item in enumerate(self.liststore):
-                fh.write(item[0], item[3])
+        # Write to file
+        try:
+            with open(filepath, "w") as fh:
+                for item in self.liststore:
+                    fh.write(f"{item[1]} {item[3]}\n")
+        except Exception as e:
+            dialog = Gtk.MessageDialog(
+                transient_for=self,
+                flags=0,
+                message_type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                text="File write error",
+            )
+
+            dialog.format_secondary_text(
+                f"Unable to write file: {basename}"
+            )
+
+            dialog.run()
+            dialog.destroy()
     
         return True
 
