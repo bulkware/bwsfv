@@ -1,6 +1,19 @@
 # bwsfv - Changelog
 
 
+## 0.8.0. (2020-06-27)
+
+- Bugfixes.
+- Clear option.
+
+
+## 0.7.0. (2020-06-25)
+
+- File save and save as.
+- Removed toolbar.
+- RPM packaging.
+
+
 ## 0.6.0. (2020-02-21)
 
 - Debian package sources.

@@ -20,7 +20,7 @@ from gi.repository import Gtk  # GIMP ToolKit
 from gi.repository import Pango  # Text layout engine
 
 # Declare variables
-application_version = "0.6.0"
+application_version = "0.8.0"
 script_path = os.path.realpath(__file__)
 script_dir = os.path.dirname(script_path)
 css_path = os.path.join(script_dir, "default.css")
@@ -32,6 +32,7 @@ class bwsfv(Gtk.Window):
     def __init__(self):
 
         # Declare application variables
+        self.filepath = None  # File path for currently open file
         self.liststore = Gtk.ListStore(str, str, str, str, str)
         self.config = {
             "window_height": 600,
@@ -98,6 +99,11 @@ class bwsfv(Gtk.Window):
         menuselection = Gtk.ImageMenuItem.new_from_stock(stock_id=Gtk.STOCK_SAVE_AS)
         menuselection.set_label("Save file as...")
         menuselection.connect("activate", self.save_file_as)
+        filemenu.append(menuselection)
+
+        menuselection = Gtk.ImageMenuItem.new_from_stock(stock_id=Gtk.STOCK_CLEAR)
+        menuselection.set_label("Clear")
+        menuselection.connect("activate", self.clear)
         filemenu.append(menuselection)
 
         separator = Gtk.SeparatorMenuItem()
@@ -178,7 +184,7 @@ class bwsfv(Gtk.Window):
     def dialog_open_file(self, widget):
 
         # Declare variables
-        checkfile = None
+        filepath = None
 
         # Initialize file open dialog
         dialog = Gtk.FileChooserDialog(
@@ -204,18 +210,18 @@ class bwsfv(Gtk.Window):
         # Show dialog and retrieve possible selection(s)
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            checkfile = dialog.get_filename()
+            filepath = dialog.get_filename()
         elif response == Gtk.ResponseType.CANCEL:
             pass
 
         dialog.destroy()
 
         # Check file selection
-        if not checkfile:
+        if not filepath:
             return True
 
         # Check file extension
-        extension = os.path.splitext(checkfile)[1][1:].lower()
+        extension = os.path.splitext(filepath)[1][1:].lower()
         if extension != "sfv":
 
             # Show error dialog for unsupported file extension
@@ -236,8 +242,9 @@ class bwsfv(Gtk.Window):
 
             return True
 
-        # Set file path
-        self.filepath = checkfile
+        # Set base name and file path
+        self.basename = os.path.basename(filepath)
+        self.filepath = filepath
 
         # Read .sfv file
         dirname = os.path.dirname(self.filepath)
@@ -261,12 +268,8 @@ class bwsfv(Gtk.Window):
     # Save file
     def save_file(self, widget):
 
-        # Write to file
-        try:
-            with open(self.filepath, "w") as fh:
-                for item in self.liststore:
-                    fh.write(f"{item[1]} {item[3]}\n")
-        except Exception as e:
+        # Check for currently open file
+        if not self.filepath:
             dialog = Gtk.MessageDialog(
                 transient_for=self,
                 flags=0,
@@ -276,7 +279,30 @@ class bwsfv(Gtk.Window):
             )
 
             dialog.format_secondary_text(
-                f"Unable to write file: {basename}"
+                f"No file open."
+            )
+
+            # Destroy dialog and return
+            dialog.run()
+            dialog.destroy()
+            return True
+
+        # Write to file
+        try:
+            with open(self.filepath, "w") as fh:
+                for item in self.liststore:
+                    fh.write(f"{item[1]} {item[3]}\n")
+        except Exception:
+            dialog = Gtk.MessageDialog(
+                transient_for=self,
+                flags=0,
+                message_type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                text="File write error",
+            )
+
+            dialog.format_secondary_text(
+                f"Unable to write file: {self.basename}"
             )
 
             dialog.run()
@@ -287,8 +313,24 @@ class bwsfv(Gtk.Window):
     # Save file as...
     def save_file_as(self, widget):
 
-        # Declare variables
-        filepath = None
+        # Check for file items to save
+        if len(self.liststore) < 1:
+            dialog = Gtk.MessageDialog(
+                transient_for=self,
+                flags=0,
+                message_type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                text="File save error",
+            )
+
+            dialog.format_secondary_text(
+                f"No file items to save."
+            )
+
+            # Destroy dialog and return
+            dialog.run()
+            dialog.destroy()
+            return True
 
         # Initialize file save dialog
         dialog = Gtk.FileChooserDialog(
@@ -309,7 +351,6 @@ class bwsfv(Gtk.Window):
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             filepath = dialog.get_filename()
-            basename = os.path.abspath(filepath)
         elif response == Gtk.ResponseType.CANCEL:
             pass
 
@@ -343,6 +384,7 @@ class bwsfv(Gtk.Window):
                 return True
 
         # Set new filepath and save file
+        self.basename = os.path.basename(filepath)
         self.filepath = filepath
         self.save_file(widget)
 
@@ -400,6 +442,13 @@ class bwsfv(Gtk.Window):
 
         # Check added files
         self.check_files(widget)
+        return True
+
+    # Clear
+    def clear(self, widget):
+        self.basename = None
+        self.filepath = None
+        self.liststore.clear()
         return True
 
     # About application
